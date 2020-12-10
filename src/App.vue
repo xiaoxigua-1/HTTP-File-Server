@@ -1,26 +1,44 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <Drive v-show="!admin" />
+  <Backstage v-show="admin" admin="admin" />
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import Backstage from "./components/Backstage.vue";
+import Drive from "./components/Drive.vue";
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
-}
+    Backstage,
+    Drive,
+  },
+  data() {
+    return {
+      admin: null,
+    };
+  },
+  beforeMount() {
+    fetch("/api/admin/", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((req) => {
+        return req.json();
+      })
+      .then((text) => {
+        this.admin = text.admin;
+      });
+  },
+};
 </script>
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  font-family: Monaco, Avenir, Helvetica, Arial, sans-serif;
+}
+html,
+body {
+  background-color: #181a1b;
+  color: white;
 }
 </style>
